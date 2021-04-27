@@ -7,12 +7,14 @@ import pickle
 
 app = Flask(__name__)
 
+my_new_model = pickle.load(open('Machine_Learning/finalized_model.sav', 'rb'))
+x_scaler = pickle.load(open('Machine_Learning/saved_x_scaler.sav', 'rb'))
 
 
 #endpoint
 @app.route('/')
 def index():
-    return "Testing flask app"
+    return render_template("index.html")
 
 @app.route("/ml")
 def model_page():
@@ -50,26 +52,17 @@ def makePredictions():
     content = request.json["data"]
 
     # parse
-    Japan_D = int(content["Japan_D"])
-    China_D = int(content["China_D"])
-    China_S = int(content["China_S"])
-    Middle_East_Rigs = int(content["Middle_East_Rigs"])
-    Canada_D = int(content["Canada_D"])
-    North_Sea_S = int(content["North_Sea_S"])
-    Canada_Rigs = int(content["Canada_Rigs"])
-    OPEC_Crude_Oil_Portion = int(content["OPEC_Crude_Oil_Portion"])
-    Total_Intl_Rigs = int(content["Total_Intl_Rigs"])
-    Asia_Pacific_Rigs = int(content["Asia_Pacific_Rigs"])
-    Brent_Crude_Price = int(content["Brent_Crude_Price"])
-    Latin_America_Rigs = int(content["Latin_America_Rigs"])
+    Total_International_Rigs = int(content["totalRigs"])
+    Asia_Rigs = int(content["asiaRigs"])
+    Brent_Oil_Price = int(content["brentPrice"])
+    Latin_Rigs = int(content["latinRigs"])
 
-    my_new_model = pickle.load(open('Machine_Learning/finalized_model.sav', 'rb'))
+    user_input = [Total_International_Rigs, Asia_Rigs, Brent_Oil_Price, Latin_Rigs]
 
-    prediction = my_new_model.predict([[Japan_D, China_D, China_S, Middle_East_Rigs, \
-    Canada_D, North_Sea_S, Canada_Rigs, OPEC_Crude_Oil_Portion, \
-    Total_Intl_Rigs, Asia_Pacific_Rigs, Brent_Crude_Price, Latin_America_Rigs \
-    ]])
-    print(prediction)
+    user_input_scaled = x_scaler.transform([user_input])
+
+    prediction = my_new_model.predict(user_input_scaled)
+    
     return(jsonify({"ok": True, "prediction": prediction}))
 
 
