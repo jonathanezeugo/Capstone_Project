@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Crime Predictor</title>
+    <title>US Rig Count Predictor</title>
 
     <!-- Bootstrap and Bootswatch CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -30,7 +30,7 @@
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a class="navbar-brand" href="/">
-            <img src="../static/images/dallas_logo.jpeg" alt="logo" style="width:40px;height:40px;">
+            <img src="../static/images/us_oil.png" alt="logo" style="width:60px;height:60px;">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -42,7 +42,7 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/dashboard">Visualizations</a>
+                    <a class="nav-link" href="/dashboard">Oil Market Visualizations</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/ml">US Rig Count Predictor</a>
@@ -59,35 +59,32 @@
 
     <div class="row text-center" style="margin-top:3%">
         <div class = "col-md-12">
-            <h6 class="display-4">Dallas Crime Incident Predictor</h6>
+            <h6 class="display-4">US Rig Count Predictor</h6>
         </div>
     </div>
 
     <div class= "container-fluid">
         <div class="row text-center" style="margin-top:2%">
             <div class = "col-md-12">
-                <h4>Use the filters below to see predict whether a crime incident will result
-                    in an <b>Arrest</b>, the incident being <b>Closed</b>, or the incident being <b>Suspended</b>.
-                </h4>
+                <h4><b>Input numbers into the fields below to predict the current US Rig Count!</b></h4>
             </div>
         </div>
         <div class="row" >
             <div class = "col-md-4">
                 <!--FILTERS-->
                 <div class="card text-white bg-primary mb-3">
-                    <h4 class="card-header">Rig Count Prediction Inputs</h4>
+                    <h4 class="card-header"><b>Rig Count Prediction Inputs</b></h4>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="col-form-label" for="nibrs_crime_category">Rig Count Prediction Inputs</label>
                                     <form id = "crime_category">
                                         <label for="fname">Total International Rigs:</label><br>
                                         <input type="number" id="totalrigs" name="totalrigs"><br>
                                         <label for="lname">Asia Pacific Rigs:</label><br>
-                                        <input type="number" id="asiapacrigs" name="asiapacrigs">
+                                        <input type="number" id="asiapacrigs" name="asiapacrigs"><br>
                                         <label for="lname">Brent Crude Price:</label><br>
-                                        <input type="number" id="brentprice" name="brentprice">
+                                        <input type="number" id="brentprice" name="brentprice"><br>
                                         <label for="lname">Latin American Rigs:</label><br>
                                         <input type="number" id="latinamrigs" name="latinamrigs">
                                     </form>
@@ -96,7 +93,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <button type="button" class="btn btn-secondary" id="filter">Make Prediction!</button>
+                                <button type="button" class="btn btn-secondary" id="filter">Predict Current US Rig Count!</button>
                             </div>
                         </div>
                     </div>
@@ -106,13 +103,8 @@
             <div class = "col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Feature Importances</h4>
-                        <h6 class="card-subtitle mb-2">Model 1</h6>
-                        <img src="static/images/feature_importances1.png" alt="logo" style="height:225px">
-                        <br>
-                        <h6 class="card-subtitle mb-2">Model 2</h6>
-                        <img src="static/images/feature_importances2.png" alt="logo" style="height:225px">
-                        <p class="text-center">Model 2 is heavily weighted by the Crime Category: Miscellaneous at approximately 78%. Therefore, we have excluded that category to show the other contributing factors and their weights respectively.</p>
+                        <h4 class="card-title"><b>Feature Importances: Correlation Heatmap</b></h4>
+                        <img src="static/images/feature_heatmap.png" alt="logo" style="height:325px">
                     </div>
                 </div>
             </div>
@@ -120,19 +112,15 @@
                 <!--GLOSSARY-->
                 <div class="card">
                     <div class="card-body">
-                    <h4 class="card-title">Filter Glossary</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">Crime Category</h6>
-                    <p class="card-text">NIBRS Crime Category. Click <a href="https://www.denvergov.org/media/gis/DataCatalog/crime/pdf/NIBRS_Crime_Types.pdf">here</a> for detailed Crime Category descriptions.</p>
-                    <h6 class="card-subtitle mb-2 text-muted">Division</h6>
-                    <p class="card-text">Geographic area comprised of census blocks where incident occurred (smallest police geography).</p>
-                    <h6 class="card-subtitle mb-2 text-muted">District</h6>
-                    <p class="card-text">Geographic area comprised of city council districts where incident occurred.</p>
-                    <h6 class="card-subtitle mb-2 text-muted">Day</h6>
-                    <p class="card-text">Day of the week of which the incident occurred.</p>
-                    <h6 class="card-subtitle mb-2 text-muted">Hour</h6>
-                    <p class="card-text">The hour of the occurrence of the incident</p>
-                    <h6 class="card-subtitle mb-2 text-muted">Watch</h6>
-                    <p class="card-text">Refers to the officer shift.  <b>Watch 1:</b> 12pm-8am. (Late Night)  <b>Watch 2:</b> 8am-4pm. (Days)  <b>Watch 3:</b> 4pm-12am. (Evenings)</p>
+                    <h4 class="card-title"><b>Feature Glossary</b></h4>
+                    <h6 class="card-subtitle mb-2 text-muted"><b><i><u>Total International Rigs:</u></i></b></h6>
+                    <p class="card-text">Number of rigs currently active internationally.<br>  26 year range: 565-1348.</p>
+                    <h6 class="card-subtitle mb-2 text-muted"><b><i><u>Asia Pacific Rigs</u></i></b></h6>
+                    <p class="card-text">Number of rigs currently active in the Asia Pacific region.<br>  26 year range of 129-277.</p>
+                    <h6 class="card-subtitle mb-2 text-muted"><b><i><u>Brent Crude Price</u></i></b></h6>
+                    <p class="card-text">Price($) of Brent Crude.  <br>26 year range of $11.21-$121.20.</p>
+                    <h6 class="card-subtitle mb-2 text-muted"><b><i><u>Latin American Rigs</u></i></b></h6>
+                    <p class="card-text">Number of rigs currently active in the Latin American region.<br>  26 year range of 180-438.</p>
                     </div>
                 </div>
             </div>
