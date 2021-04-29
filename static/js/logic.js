@@ -31,8 +31,11 @@ function makePredictions() {
         url: "/makePredictions",
         contentType: 'application/json;charset=UTF-8',
         data: JSON.stringify({ "data": payload }),
-        success: $("#output").html(`<h3>Predicted US Rigs Count: ${prediction}</h3>`),
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
+        success: function(returnedData) { 
+                $("#output").html(`<h3>Predicted US Rigs Count: ${returnedData["prediction"]}</h3>`)
+            },
+
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
             alert("Status: " + textStatus);
             alert("Error: " + errorThrown);
         }
