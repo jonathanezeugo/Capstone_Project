@@ -1,3 +1,4 @@
+#Import Modules
 from flask import Flask, render_template, jsonify, send_from_directory, request
 import json
 import pandas as pd
@@ -61,7 +62,7 @@ def makePredictions():
 
     user_input_scaled = x_scaler.transform([user_input])
 
-    prediction = my_new_model.predict(user_input_scaled)
+    prediction = my_new_model.predict(user_input_scaled).tolist()
     
     return(jsonify({"ok": True, "prediction": prediction}))
 
