@@ -36,7 +36,6 @@ def data():
     # Return template and data
     return render_template("data.html")
 
-
 @app.route("/resources")
 def resources():
     # Return template and data
