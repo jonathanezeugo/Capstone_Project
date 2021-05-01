@@ -27,6 +27,11 @@ def dashboard():
     # Return template and data
     return render_template("visualizations.html")
 
+@app.route("/analysis")
+def analysis():
+    # Return template and data
+    return render_template("analysis.html")
+
 @app.route("/dashboardmap")
 def map():
     # Return template and data
