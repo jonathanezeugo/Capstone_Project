@@ -1,4 +1,3 @@
-#Import Modules
 from flask import Flask, render_template, jsonify, send_from_directory, request
 import json
 import pandas as pd
@@ -25,17 +24,7 @@ def model_page():
 @app.route("/dashboard")
 def dashboard():
     # Return template and data
-    return render_template("visualizations1.html")
-
-@app.route("/dashboard2")
-def dashboard2():
-    # Return template and data
-    return render_template("visualizations2.html")
-
-@app.route("/analysis")
-def analysis():
-    # Return template and data
-    return render_template("analysis.html")
+    return render_template("visualizations.html")
 
 @app.route("/dashboardmap")
 def map():
@@ -46,7 +35,6 @@ def map():
 def data():
     # Return template and data
     return render_template("data.html")
-
 
 @app.route("/resources")
 def resources():
@@ -72,7 +60,7 @@ def makePredictions():
 
     user_input_scaled = x_scaler.transform([user_input])
 
-    prediction = my_new_model.predict(user_input_scaled).tolist()
+    prediction = my_new_model.predict(user_input_scaled)
     
     return(jsonify({"ok": True, "prediction": prediction}))
 
