@@ -1,124 +1,96 @@
-$(document).ready(function() {
-    // var dateFilter = $("#year").val(); //gets input value to filter
-    buildTable(); 
-    // buildTable(dateFilter);
-    //Event Listeners
-    $("#filter-btn").on("click", function(e) {
-        e.preventDefault();
-        buildTable();
-    });
-    $("#filter-clear").on("click", function(e) {
-        e.preventDefault();
-        resetFilters();
-        buildTable();
-    });
-    $("#form").on("submit", function(e) {
-        e.preventDefault();
-        buildTable();
-    });   
-}); 
-
-function resetFilters() {
-    $("#watch").val("");
-
-    $("#hour").val("");
-    $("#hour").text("");
-
-    // $("#latitude").val("");
-    // $("#latitude").text("");
-
-    $("#division").val("");
-
-    $("#district").val("");
-
-    $("#day").val("");
-
-    $("#crime_category").val("");
-
-
-}
-
-function buildTable() {
-    d3.csv("static/data/datatable2.csv").then(function(crimeData) {
-
-        var watchFilter = parseInt($("#watch").val()); 
-        var hourFilter = parseInt($("#hour").val());
-        // var latitudeFilter = parseFloat(($("#latitude").val()));
-        var divisionFilter = $("#division").val();
-        var districtFilter = $("#district").val();
-        var dayFilter = $("#day").val();
-        var crimeFilter = $("#crime_category").val();
-
-        // apply filters
-        var filteredData = crimeData
-
-        if (watchFilter) {
-           filteredData = filteredData.filter(row => parseInt(row.watch) === (watchFilter));
-           }
-        if (hourFilter) {
-            filteredData = filteredData.filter(row => parseInt(row.hour) === (hourFilter))
-            } 
-        // if (latitudeFilter) {
-        //     filteredData = filteredData.filter(row => parseFloat(row.latitude) === parseFloat(latitudeFilter));
-        //     } 
-        if (divisionFilter) {
-            filteredData = filteredData.filter(row => (row.division) === (divisionFilter));
-            } 
-        if (districtFilter) {
-            filteredData = filteredData.filter(row => (row.district) === (districtFilter));
-            } 
-        if (dayFilter) {
-            filteredData = filteredData.filter(row => (row.day1) === (dayFilter));
-            } 
-        if (crimeFilter) {
-            filteredData = filteredData.filter(row => (row.nibrs_crime_category) === (crimeFilter));
-            } 
-       // // see if we have any data left
-       if (filteredData.length === 0) {
-           alert("No Data Found!");
-       } else {
-            filteredData.forEach(function(row) {
-                row.latitude = parseFloat(row.latitude).toFixed(2);
-                row.longitude = parseFloat(row.longitude).toFixed(2)
-            })
-       }
-            
-        buildTableString(filteredData);
-    }); 
-}
-
-function buildTableString(crimeData) {
-
-    // JQUERY creates an HTML string
-    var tbody = $("#table>tbody");
-    //clear table
-    tbody.empty();
-
-    //destroy datatable
-    $("table").DataTable().clear().destroy();
-
-    var datarows = crimeData.map(x => [x["watch"], x["division"], x["district"], x["month1"],  x["day1"], x["status"], x["nibrs_crime_category"] ,x["hour"],x["latitude"],x ["longitude"]])
-
-    //redraw
-    $("#table").DataTable({
-
-        data: datarows,
-        "defaultContent": "", 
-
-        "pageLength": 15, 
-        dom: 'Bfrtip', //lbfrtip if you want the length changing thing
-        buttons: [
-            { extend: 'copyHtml5' },
-            { extend: 'excelHtml5' },
-            { extend: 'csvHtml5' },
-            {
-                extend: 'pdfHtml5',
-                title: function() { return "Dallas Crime Data"; },
-                orientation: 'portrait',
-                pageSize: 'LETTER',
-                text: 'PDF',
-                titleAttr: 'PDF'
-            }
-        ]
-    });
-}; 
+d3.csv('static/data/Capstone_Data.csv', function(data) {
+        
+    tableData = data;
+    console.log(data)
+  
+    // get table references
+    var tbody = d3.select("tbody");
+  
+    function buildTable(data) {
+      // First, clear out any existing data
+      tbody.html("");
+  
+      // Next, loop through each object in the data
+      // and append a row and cells for each value in the row
+      
+    //   Array.from(data).forEach((dataRow) => {
+        data.forEach((dataRow) => {
+  
+        // Append a row to the table body
+        var row = tbody.append("tr");
+  
+        // Loop through each field in the dataRow and add
+        // each value as a table cell (td)
+        Object.values(dataRow).forEach((val) => {
+          var cell = row.append("td");
+          cell.text(val);
+        });
+      });
+    }
+  
+  
+    // Keep Track of all filters
+    var filters = {};
+  
+    function updateFilters() {
+  
+        // Save the element, value, and id of the filter that was changed
+        var changedElement = d3.select(this).select("input");
+        var elementValue = changedElement.property("value");
+        var filterId = changedElement.attr("id");
+    
+        // If a filter value was entered then add that filterId and value
+        // to the filters list. Otherwise, clear that filter from the filters object
+        if (elementValue) {
+            filters[filterId] = elementValue;
+        }
+        else {
+            delete filters[filterId];
+        }
+    
+        // Call function to apply all filters and rebuild the table
+        filterTable();
+  
+    };
+  
+    function filterTable() {
+  
+        // Set the filteredData to the tableData
+        let filteredData = tableData;
+    
+        // Loop through all of the filters and keep any data that
+        // matches the filter values
+        Object.entries(filters).forEach(([key, value]) => {
+            filteredData = filteredData.filter(row => row[key] === value);
+        });
+    
+        // Finally, rebuild the table using the filtered Data
+        buildTable(filteredData);
+        };
+  
+    // Attach an event to listen for changes to each filter
+    d3.selectAll(".filter").on("change", updateFilters);
+  
+        // Build the table when the page loads
+        buildTable(tableData);
+    
+            // //redraw
+            // $("#oil-table").DataTable({
+            //     dom: 'Bfrtip', //lbfrtip if you want the length changing thing
+            //     buttons: [
+            //         { extend: 'copyHtml5' },
+            //         { extend: 'excelHtml5' },
+            //         { extend: 'csvHtml5' },
+            //         {
+            //             extend: 'pdfHtml5',
+            //             title: function() { return "OIL Data"; },
+            //             orientation: 'portrait',
+            //             pageSize: 'LETTER',
+            //             text: 'PDF',
+            //             titleAttr: 'PDF'
+            //         }
+            //     ]
+            // });
+    
+        // }  
+  });
