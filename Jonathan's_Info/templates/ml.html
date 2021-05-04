@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>US Rig Count Predictor</title>
+
+    <!-- Bootstrap and Bootswatch CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/cosmo/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+    
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://unpkg.com/d3-v6-tip@1.0.6/build/d3-v6-tip.js"></script>
+    <script src="https://unpkg.com/jeezy@1.13.1/lib/jeezy.min.js"></script>
+    <script type="text/javascript" src="/static/js/logic.js"></script>
+
+    <!-- JS -->
+    <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.js"></script>
+
+</head>
+
+<body>
+
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">
+            <img src="../static/images/us_oil.png" alt="logo" style="width:60px;height:60px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">Oil Market Visualizations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ml">US Rig Count Predictor</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/data">Data</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About Us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="row text-center" style="margin-top:3%">
+        <div class = "col-md-12">
+            <h6 class="display-4">US Rig Count Predictor</h6>
+        </div>
+    </div>
+
+    <div class= "container-fluid">
+        <div class="row text-center" style="margin-top:2%">
+            <div class = "col-md-12">
+                <h4><b>Input numbers into the fields below to predict the current US Rig Count!</b></h4>
+            </div>
+        </div>
+        <div class="row" >
+            <div class = "col-md-4">
+                <!--FILTERS-->
+                <div class="card text-white bg-primary mb-3">
+                    <h4 class="card-header"><b>Rig Count Prediction Inputs</b></h4>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <form id = "crime_category">
+                                        <label for="fname">Total International Rigs:</label><br>
+                                        <input type="number" id="totalrigs" name="totalrigs"><br>
+                                        <label for="lname">Asia Pacific Rigs:</label><br>
+                                        <input type="number" id="asiapacrigs" name="asiapacrigs"><br>
+                                        <label for="lname">Brent Crude Price:</label><br>
+                                        <input type="number" id="brentprice" name="brentprice"><br>
+                                        <label for="lname">Latin American Rigs:</label><br>
+                                        <input type="number" id="latinamrigs" name="latinamrigs">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-secondary" id="filter">Predict Current US Rig Count!</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--FEATURE IMPORTANCES-->
+            <div class = "col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><b>Feature Importances: Correlation Heatmap</b></h4>
+                        <img src="static/images/feature_heatmap.png" alt="logo" style="height:325px">
+                    </div>
+                </div>
+            </div>
+            <div class = "col-md-4">
+                <!--GLOSSARY-->
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="card-title"><b>Feature Glossary</b></h4>
+                    <h6 class="card-subtitle mb-2 text-muted"><b><i><u>Total International Rigs:</u></i></b></h6>
+                    <p class="card-text">Number of rigs currently active internationally.<br>  26 year range: 565-1348.</p>
+                    <h6 class="card-subtitle mb-2 text-muted"><b><i><u>Asia Pacific Rigs</u></i></b></h6>
+                    <p class="card-text">Number of rigs currently active in the Asia Pacific region.<br>  26 year range of 129-277.</p>
+                    <h6 class="card-subtitle mb-2 text-muted"><b><i><u>Brent Crude Price</u></i></b></h6>
+                    <p class="card-text">Price($) of Brent Crude.  <br>26 year range of $11.21-$121.20.</p>
+                    <h6 class="card-subtitle mb-2 text-muted"><b><i><u>Latin American Rigs</u></i></b></h6>
+                    <p class="card-text">Number of rigs currently active in the Latin American region.<br>  26 year range of 180-438.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr style="color:lightgray; border-width: 3px;">
+    
+    <!--MODAL-->
+    <div id="myModal" class="modal">
+        <div class="modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"><b>Our Predictions</b></h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12 ms-auto">
+                                <h1 id="output"></h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div id="myDiv"></div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div id="myDiv2" style="height:320px"></div>
+                                <p>Our two-step model identifies whether or not an incident ended in a Suspension in Model 1.  If the probabilitiy of Suspension is less than 50%, the incident is then run through Model 2 to determine the probability that an incident ending in Arrest or Clearance.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
