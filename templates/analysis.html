@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>US Oil Rig Exploration & Analysis</title>
+        
+    <!-- Bootstrap and Bootswatch CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/cosmo/bootstrap.min.css">
+    <link rel= "stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://unpkg.com/d3-v6-tip@1.0.6/build/d3-v6-tip.js"></script>
+    <script src="https://unpkg.com/jeezy@1.13.1/lib/jeezy.min.js"></script>
+        
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+    
+
+<body>
+
+    <!--Navbar-->       
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">
+            <img src="../static/images/us_oil.png" alt="logo" style="width:60px;height:60px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor02">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Oil Market Visualizations</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/dashboard">Supply and Demand Analysis</a>
+                        <a class="dropdown-item" href="/dashboard2">Brent Crude Price Analysis</a>
+                        <!-- <a class="dropdown-item" href="/dashboard3">Supply Demand Try Analysis</a> -->
+                        <a class="dropdown-item" href="/dashboardmap">Regional Map With Rig Count</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ml">US Rig Count Predictor</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/analysis">Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/data">Data</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/resources">Resources</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About Us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="row text-center" style="margin-top:5%">
+        <div class = "col-md-12">
+            <h6 class="display-4">US Rig Count Exploration & Analysis</h6>
+        </div>
+    </div>
+
+    <!--METHOD-->
+    <div class= "container-fluid">
+        <div class="row" style="margin-top:3%">
+        <div class = "col-md-12">
+            <blockquote class="blockquote text-center">
+                <p class="mb-0">Data Sources: <a href="https://www.kaggle.com/nroll12/global-oil-supplydemand"><b> Kaggle: Global Oil Supply/Demand </b></a>, <a href="https://www.kaggle.com/mabusalah/brent-oil-prices"><b> Kaggle: Brent Oil Prices </b></a>, <a href="https://rigcount.bakerhughes.com/intl-rig-count"><b> Baker Hughes: International Rig Count </b></a> 
+                </p>
+            </blockquote>
+            <br>
+        </div>
+        </div>
+        
+        <!--DATA GATHERING-->
+        <div class="row">
+        <div class = "col-md-12">
+            <h3><b>Data Gathering</b></h3>
+            <br>
+        </div>
+        </div>
+        <div class="row">
+        <div class = "col-md-12">
+            <blockquote class="blockquote">
+                <p class="mb-0">
+                    <img src="../static/images/data_gathering.png" alt = "Data Gathering" style="float:left;width:35%;padding:2%;">
+                    In choosing to analyze the US Rig Count, we quickly realized that it would be hard to find a single dataset that would provide enough relevant information for such a grand task.  To combat this problem, we decided to combine 3 different 
+                    csv files, 2 from kaggle and 1 provided by Baker Hughes.  The 3 different sets of information we gathered were oil supply/demand data, brent crude price, and rig count.  
+                <br>
+                <br>One of the issues we ran into with having 3 different data sources is that not all the data was provided with the same time intervals.  To combat this, 
+                    we used pivot charts and different microsoft excel skills to aggregate the data into the largest common time interval, quarter year. While this reduced the total number of rows of data, we still feel that there is enough data for our machine learning algorithms to
+                    accurately predict our target.  From there, we combiend the data into a single csv file, and then read it into a pandas dataframe using the Jupyter Notebook software.  Let the fun begin!
+                </p>
+                </blockquote>
+        </div>
+        </div>
+        <br>
+
+        <!--DATA PREPARATION-->
+        <div class="row" style="margin-top:5%">
+        <div class = "col-md-12">
+            <h3><b>Data Preparation</b></h3>
+            <br>
+        </div>
+        </div>
+        <div class="row">
+        <div class = "col-md-12">
+            <blockquote class="blockquote">
+                <p class="mb-0">
+                <img src="../static/images/one_hot_encoding.png" alt = "One Hot Encoding" style="float:left;width:35%;padding:2%;">
+                <br>As stated above, we now had all of our data broken down by quarter.  In prepping our data for machine learning, we learned that our quarter column was actually a string.  For example, instead of quarter 1 being displayed simply as integer "1", it was "Q1".
+                Due to this it became necessary to encode the data using either label encoding or one-hot-encoding.  To ensure that our machine learning algorithims would not erroneously assign more values to quarters 3 and 4 over quarters 1 and 2, we used 
+                we used pandas get_dummies method to one-hot-encode the quarter data.
+                </p>
+            </blockquote>
+        </div>
+        </div>
+        <br>
+        <div class="row">
+        <div class = "col-md-12">
+            <blockquote class="blockquote">
+                <p class="mb-0">
+                <img src="../static/images/scaling.png" alt = "Scaling" style="float:left;width:35%;padding:2%;">
+                <br>To explore our data, we created histograms of each of our columns and found that while some features displayed normal distributions, there were quite a bit that were either left or right skewed.
+                We used sklearn's MinMaxScaler import to scale our data for this issue.
+                </p>
+            </blockquote>
+        </div>
+        </div>
+        
+        <!--FEATURE EXPLORATION & CORRELATIONS-->
+        <div class="row" style="margin-top:5%">
+        <div class = "col-md-12">
+            <h3><b>Feature Exploration & Correlation</b></h3>
+            <br>
+        </div>
+        </div>
+        <div class="row">
+        <div class = "col-md-12">
+            <blockquote class="blockquote">
+                <p class="mb-0">
+                <img src="../static/images/high_correlations.png" alt = "Month Loop" style="float:left;width:35%;padding:2%;">
+                <br>Due to our desire to create a more usable model for the end user, we wanted to try and eliminate some of the columns that appeared to be less highly correlated with our US Rig Count target.  Through trial and error,
+                we landed on a correlation benchmark of .6, both positive and negative.  Creating feature columns with a correlation of .6 or higher, we narroed our feature columns to 'Total Intl. Rigs',
+                'Asia Pacific Rigs', 'Brent Crude Price', and 'Latin America Rigs'.
+                </p>
+            </blockquote>
+        </div>
+        </div>
+        <br>
+        <div class="row">
+        <div class = "col-md-12">
+            <blockquote class="blockquote">
+                <p class="mb-0">
+                <img src="../static/images/correlations.png" alt = "Month Loop" style="float:left;width:35%;padding:2%;">
+                <br>Using our new feature columns, we ran a correlation table to further inspect the figures and ensure that we were on the right track. 
+                </p>
+            </blockquote>
+        </div>
+        </div>
+        <br>
+        
+        <!--MACHINE LEARNING-->
+        <div class="row" style="margin-top:5%">
+        <div class = "col-md-12">
+            <h3><b>Machine Learning</b></h3>
+            <br>
+        </div>
+        </div>
+        <div class="row">
+        <div class = "col-lg-12">
+            <blockquote class="blockquote">
+                <p class="mb-0">As we were looking to predict continuous values, we ran various machine learning regression models in order to find the model that produced the highest correlation and lowest error estimator 
+                                combination.  In order to evaluate correlation, we used the r-squared metric.  To evaluate error, we used the Mean Squared Error metric.  After splitting the data into training and testing data,
+                                we ran both sets of data through the linear regression, ridge, lasso, ElasticNet, decision tree, random forest, AdaBoost, GradientBoost, KNN, and SVN models.
+                </p>
+            </blockquote>
+        </div>
+        </div>
+        <br>
+        <div class="row">
+        <div class = "col-md-6">
+            <h5>Best Linear Regression Model: Ridge</h5>
+            <blockquote class="blockquote">
+                <p class="mb-0">
+                    The best linear regression model that we came across was the ridge model.  The ridge model actually performed better on the testing data then the training data
+                    with a r-squared correlation of .87 and a mean squared error of 29220 when applied to the testing data, and a .81 r-squared correlation and mean squared error value of 36590 when applied
+                    to the training data.
+                </p>
+            </blockquote>
+        </div>
+        <div class = "col-md-6">
+            <h5>Best Tree Model: Random Forest</h5>
+            <blockquote class="blockquote">
+                <p class="mb-0">
+                    The best tree model, and ultimately the best model overall, proved to be the random forest model.  Although it seemed that the model was overfitting the training data with a 
+                    r-squared correlation value of .97 and a mean squared error of just 74, the random forest actually proved to be quite predictive for the testing data as well.  Ultimately, with a
+                    r-squared correlation value of .89 and a mean squared error of 25225, the random forest model was the model we decided to choose to conduct our final analysis.
+                    </r-squared>
+                </p>
+            </blockquote>
+        </div>
+        </div>
+        <div class="row">
+        <div class = "col-md-6">
+            <img src="../static/images/ridge_model.png" alt="Ridge" style="width:65%;padding:2%;" class="center">
+        </div>
+        <div class = "col-lg-6">
+            <img src="../static/images/ran_forest_model_2.png" alt="Alex" style="width:65%;padding:2%;" class="center">
+        </div>
+        </div>
+        <br>
+
+        <!--FINALIZING THE MODEL-->
+        <div class="row">
+            <div class = "col-md-12">
+                <h3><b>Finalizing Model</b></h3>
+                <br>
+            </div>
+            </div>
+            <div class="row">
+            <div class = "col-md-12">
+                <blockquote class="blockquote">
+                    <p class="mb-0">
+                        <img src="../static/images/final_model.png" alt = "Data Gathering" style="float:left;width:35%;padding:2%;">
+                        Upon deciding on the random forest model, our last step in the model building process was to fully fit the data to the model and run the algorithm.  We were happily surprised to see
+                        a high r-squared correlation of .98 and a relatively low mean squared error figure of 4761.
+                    </p>
+                    </blockquote>
+            </div>
+            </div>
+            <br>
+        
+            <!--READYING THE MODEL FOR DEPLOYMENT-->
+        <div class="row" style="margin-top:5%">
+        <div class = "col-md-12">
+            <h3><b>Readying for Deployment</b></h3>
+            <br>
+        </div>
+        </div>
+        <div class="row">
+        <div class = "col-lg-12">
+            <blockquote class="blockquote">
+                <p class="mb-0">Because data analysis is only as good as its ability to produce actionable intelligence, our work was not over.  Paramount to the machine learning process
+                                is ensuring that the end user is able to successfully use the model him or herself.  In order to ensure this, we tested some of our deployment code to guarantee
+                                it passed the common sense test.
+                </p>
+            </blockquote>
+        </div>
+        </div>
+        <br>
+        <div class="row">
+        <div class = "col-md-6">
+            <h5>Testing the Model</h5>
+            <blockquote class="blockquote">
+                <p class="mb-0">
+                    In our initial test, we found that we had to input scaled data into the model in order for it to produce a common sense output.  We remembered that this was due to us scaling the data in the first place.
+                    
+                </p>
+            </blockquote>
+        </div>
+        <div class = "col-md-6">
+            <h5>Testing the Scaler<py/h5>
+            <blockquote class="blockquote">
+                <p class="mb-0">Because of this, we realized we would have to programatically transform the user input using the same scaler we used in our code before we entered the users input into our model.
+                </p>
+            </blockquote>
+        </div>
+        </div>
+        <div class="row">
+        <div class = "col-md-6">
+            <img src="../static/images/test_model.png" alt="Alex" style="width:65%;padding:2%;" class="center">
+        </div>
+        <div class = "col-lg-6">
+            <img src="../static/images/test_scaler.png" alt="Alex" style="width:65%;padding:2%;" class="center">
+        </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
