@@ -1,32 +1,74 @@
-$(document).ready(function(){
-    $('#filter-btn').click(function(){
-    $.ajax({
-    url:"../static/data/Capstone_Data.csv",
-    dataType:"text",
-    success:function(data)
-    {
-    var oil_data = data.split(/\r?\n|\r/);
-    var table_data = '<table class="table table-bordered table-striped">';
-    for(var count = 0; count<oil_data.length; count++)
-    {
-        var cell_data = oil_data[count].split(",");
-        table_data += '<tr>';
-        for(var cell_count=0; cell_count<cell_data.length; cell_count++)
-        {
-        if(count === 0)
-        {
-        table_data += '<th>'+cell_data[cell_count]+'</th>';
-        }
-        else
-        {
-        table_data += '<td>'+cell_data[cell_count]+'</td>';
-        }
-        }
-        table_data += '</tr>';
+d3.csv('static/data/Capstone_Data.csv', function(data) {
+    tableData = data;
+    console.log(data)
+    // get table references
+    var tbody = d3.select("tbody");
+    function buildTable(data) {
+      // First, clear out any existing data
+      tbody.html("");
+      // Next, loop through each object in the data
+      // and append a row and cells for each value in the row
+    //   Array.from(data).forEach((dataRow) => {
+        data.forEach((dataRow) => {
+        // Append a row to the table body
+        var row = tbody.append("tr");
+        // Loop through each field in the dataRow and add
+        // each value as a table cell (td)
+        Object.values(dataRow).forEach((val) => {
+          var cell = row.append("td");
+          cell.text(val);
+        });
+      });
     }
-    table_data += '</table>';
-    $('#oil_data_table').html(table_data);
-    }
-    });
-    });
-});
+    // Keep Track of all filters
+    var filters = {};
+    function updateFilters() {
+        // Save the element, value, and id of the filter that was changed
+        var changedElement = d3.select(this).select("input");
+        var elementValue = changedElement.property("value");
+        var filterId = changedElement.attr("id");
+        // If a filter value was entered then add that filterId and value
+        // to the filters list. Otherwise, clear that filter from the filters object
+        if (elementValue) {
+            filters[filterId] = elementValue;
+        }
+        else {
+            delete filters[filterId];
+        }
+        // Call function to apply all filters and rebuild the table
+        filterTable();
+    };
+    function filterTable() {
+        // Set the filteredData to the tableData
+        let filteredData = tableData;
+        // Loop through all of the filters and keep any data that
+        // matches the filter values
+        Object.entries(filters).forEach(([key, value]) => {
+            filteredData = filteredData.filter(row => row[key] === value);
+        });
+        // Finally, rebuild the table using the filtered Data
+        buildTable(filteredData);
+        };
+    // Attach an event to listen for changes to each filter
+    d3.selectAll(".filter").on("change", updateFilters);
+        // Build the table when the page loads
+        buildTable(tableData);
+            // //redraw
+            // $("#oil-table").DataTable({
+            //     dom: 'Bfrtip', //lbfrtip if you want the length changing thing
+            //     buttons: [
+            //         { extend: 'copyHtml5' },
+            //         { extend: 'excelHtml5' },
+            //         { extend: 'csvHtml5' },
+            //         {
+            //             extend: 'pdfHtml5',
+            //             title: function() { return "OIL Data"; },
+            //             orientation: 'portrait',
+            //             pageSize: 'LETTER',
+            //             text: 'PDF',
+            //             titleAttr: 'PDF'
+            //         }
+            //     ]
+            // });
+        // }  
+  });
