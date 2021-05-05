@@ -45,7 +45,7 @@ def map():
 @app.route("/data")
 def data():
     # Return template and data
-    return render_template("data1.html")
+    return render_template("data.html")
 
 
 @app.route("/resources")
