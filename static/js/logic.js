@@ -3,7 +3,6 @@ $(document).ready(function() {
 
     $("#filter").click(function() {
         makePredictions();
-        $("#myModal").modal("show");
     });
 
 
@@ -41,4 +40,4 @@ function makePredictions() {
         }
     });
 
-}
+};

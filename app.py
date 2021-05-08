@@ -25,7 +25,17 @@ def model_page():
 @app.route("/dashboard")
 def dashboard():
     # Return template and data
-    return render_template("visualizations.html")
+    return render_template("visualizations1.html")
+
+@app.route("/dashboard2")
+def dashboard2():
+    # Return template and data
+    return render_template("visualizations2.html")
+
+@app.route("/analysis")
+def analysis():
+    # Return template and data
+    return render_template("analysis.html")
 
 @app.route("/dashboardmap")
 def map():
